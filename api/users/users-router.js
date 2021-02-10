@@ -1,9 +1,15 @@
 const express = require('express');
-
+const Users = require('./users-model');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  // RETURN AN ARRAY WITH ALL THE USERS
+  Users.get()
+    .then(user=>{
+      res.status(200).json(user)
+    })
+    .catch(error=>{
+      res.status(500).json({message:`Server error:${error}`})
+    })
 });
 
 router.get('/:id', (req, res) => {
@@ -39,3 +45,5 @@ router.post('/:id/posts', (req, res) => {
 });
 
 // do not forget to export the router
+
+module.exports= router;
