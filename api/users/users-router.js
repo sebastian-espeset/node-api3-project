@@ -15,6 +15,7 @@ router.get('/', (req, res) => {
 //apply middleware here
 router.get('/:id',validateUserId, (req, res) => {
   res.status(200).json(req.user)
+ 
 });
 
 router.post('/', validateUser, (req, res) => {
@@ -30,10 +31,16 @@ router.post('/', validateUser, (req, res) => {
   
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateUserId, (req, res) => {
   // RETURN THE FRESHLY UPDATED USER OBJECT
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  Users.update(req.user.id,req.body)
+    .then((user)=>{
+      res.status(200).json(user)
+    }).catch((error)=>{
+      res.status(500).json({message:`Server error: ${error}`})
+    })
 });
 
 router.delete('/:id', (req, res) => {
