@@ -9,18 +9,20 @@ function logger(req, res, next) {
   next();
 }
 
-const validateUserId= async (req, res, next)=> {
+const validateUserId = async (req, res, next)=> {
   const userId = req.params.id;
     try{
-      const validUser = await Users.getById(id)
-      if(!userId){
-        res.status(400).json({message:`no user with id: ${id} exists`})
+      let user = await Users.getById(userId)
+      if(!user){
+        res.status(400).json({message:`user not found`})
       } else{
-        validUser = req.validUser;
+       req.user = user;
+       next();
       }
     } catch(error){
       res.status(500).json({message:`server error: ${error}`})
     }
+
 }
 
 function validateUser(req, res, next) {

@@ -1,6 +1,7 @@
 const express = require('express');
 const Users = require('./users-model');
 const router = express.Router();
+const {validateUserId, validateUser}= require('../middleware/middleware')
 
 router.get('/', (req, res) => {
   Users.get()
@@ -11,10 +12,9 @@ router.get('/', (req, res) => {
       res.status(500).json({message:`Server error:${error}`})
     })
 });
-
-router.get('/:id', (req, res) => {
-  // RETURN THE USER OBJECT
-  // this needs a middleware to verify user id
+//apply middleware here
+router.get('/:id',validateUserId, (req, res) => {
+  res.status(200).json(req.user)
 });
 
 router.post('/', (req, res) => {
